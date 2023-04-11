@@ -32,18 +32,6 @@ export default props => {
     )
 }
 
-toggleTask = taskId => {
-
-    const tasks = [...this.state.tasks]
-    tasks.forEach(task => {
-        if (task.id === taskId) {
-            task.doneAt = task.doneAt ? null : new Date()
-        }
-    })
-
-    this.setState({ tasks })
-}
-
 function getCheckView(doneAt) {
 
     if (doneAt != null) {

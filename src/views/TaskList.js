@@ -10,12 +10,14 @@ import moment from 'moment'
 import 'moment/locale/pt-br'
 
 import Task from "../components/Task"
+import AddTask from "./AddTask"
 
 export default class TaskList extends Component {
 
     state = {
 
         showDoneTaks: true,
+        showAddTask: false,
         visibleTasks: [],
         tasks: [{
             id: Math.random(),
@@ -40,8 +42,8 @@ export default class TaskList extends Component {
     isPending = task => task.doneAt === null
 
     filterTasks = () => {
-        
-        let visibleTasks = this.state.showDoneTaks ? [...this.state.tasks] : this.state.tasks.filter(this.isPending)  
+
+        let visibleTasks = this.state.showDoneTaks ? [...this.state.tasks] : this.state.tasks.filter(this.isPending)
         this.setState({ visibleTasks })
     }
 
@@ -63,9 +65,9 @@ export default class TaskList extends Component {
 
         return (
             <View style={styles.container}>
-
+                <AddTask isVisible={this.state.showAddTask} onCancel={() => this.setState({ showAddTask: false })} />
                 <ImageBackground source={todayImage} style={styles.background}>
-                    <View style={styles.IconBar}>
+                    <View style={styles.iconBar}>
                         <TouchableOpacity onPress={this.toggleFilter}>
                             <Icon name={this.state.showDoneTaks ? 'eye' : 'eye-slash'} size={20} color={commonStyles.colors.secondary} />
                         </TouchableOpacity>
@@ -83,6 +85,10 @@ export default class TaskList extends Component {
                         keyExtractor={item => `${item.id}`}
                         renderItem={({ item }) => <Task {...item} toggleTask={this.toggleTask} />} />
                 </View>
+
+                <TouchableOpacity style={styles.addButton} onPress={() => this.setState({ showAddTask: true })} activeOpacity={0.7}>
+                    <Icon name="plus" size={20} color={commonStyles.colors.secondary} />
+                </TouchableOpacity>
 
             </View>
         )
@@ -117,10 +123,21 @@ const styles = StyleSheet.create({
         marginLeft: 20,
         marginBottom: 30
     },
-    IconBar: {
+    iconBar: {
         flexDirection: 'row',
         marginHorizontal: 20,
         justifyContent: 'flex-end',
         marginTop: Platform.os === 'ios' ? 40 : 10
+    },
+    addButton: {
+        position: 'absolute',
+        right: 30,
+        bottom: 30,
+        width: 50,
+        height: 50,
+        borderRadius: 25,
+        backgroundColor: commonStyles.colors.today,
+        justifyContent: "center",
+        alignItems: "center"
     }
 })
